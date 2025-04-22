@@ -1,0 +1,61 @@
+trigger:
+- none
+
+parameters:
+- name: Storage_Update
+  type: Boolean
+  value: true
+- name: KV_Update
+  type: Boolean
+  value: true
+- name: Target_IPs
+  type: string
+  value: '123.x.x.x, 123.y.y.y'
+- name: environment
+  displayName: Target environment
+  type: string
+  default: test
+  values:
+    - test
+    - dev
+    - prod
+
+pool:
+  name: 'az-pool-set1'
+variables:
+   name: serviceConnection
+   value: scn-azure  
+
+jobs:
+ - job: Storage
+   condition: ${{ parameters.Storage_Update }}
+   displayName: Storage Update
+   steps:
+     - task: AzurePowerShell@5
+       name: Update
+       env:
+        Target: ${{ parameters.Target_IPs }}
+        Environment: ${{ parameters.environment }}
+       inputs:
+         azureSubscription: $(service Connection)
+         addSpnToEnvironment: true
+         azurePowershellVersion: LatestVersion
+         scriptType: 'FilePath'
+         scriptPath: '$(System.DefaultWorkingDirectory)/scripts/StorageAcc-Update-Azure.ps1'
+         failOnStandardError: true
+ - job: kv
+   condition: ${{ parameters.KV_Update }}
+   displayName: KeyVault Update
+   steps:
+     - task: AzurePowerShell@5
+       name: Update
+       env:
+        Target: ${{ parameters.Target_IPs }}
+        Environment: ${{ parameters.environment }}
+       inputs:
+         azureSubscription: $(service Connection)
+         addSpnToEnvironment: true
+         azurePowershellVersion: LatestVersion
+         scriptType: 'FilePath'
+         scriptPath: '$(System.DefaultWorkingDirectory)/scripts/KeyVault-Update-Azure.ps1'
+         failOnStandardError: true 
