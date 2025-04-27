@@ -2,7 +2,6 @@
 Update Network and firewall entries in Storage accounts in Azure Subscriptions
 A string to match against subscription names (e.g. "Test" to target all "*Test*" subscriptions).
 #>
-Write-Output "Running PowerShell Script..."
 Import-Module Az.ResourceGraph
 
 # Configuration
@@ -59,7 +58,5 @@ foreach ($sub in $subs) {
             Write-Error "Error processing $accountName: $_"
         }
     }
-	
-    Write-Output "====== End of Subscription: $($subscription.name) ========"
 }
- Write-Output "Updates completed....."
+
