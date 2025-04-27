@@ -4,7 +4,6 @@ A string to match against subscription names (e.g. "Test" to target all "*Test*"
 #>
 Import-Module Az.ResourceGraph
 
-Write-Output "Running PowerShell Script..."
 # Get the Environment name and required Ips
 $EnvironmentName = $env:Environment
 $requiredIps = $env:Target -split '\s*,\s*'
